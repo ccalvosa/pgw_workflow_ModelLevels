@@ -522,6 +522,8 @@ delta files.
 * ECMWF: IFS Documentation, Part III (Dynamics and Numerical Procedures) and
   Part IV (Physical Processes).
 
+**License:** [MIT](LICENSE)
+
 **Author:** Carlos Calvo-Sancho, Centro de Investigaciones sobre Desertificación,
 Consejo Superior de Investigaciones Científicas (CIDE, CSIC-UV-GVA), Climate,
 Atmosphere and Ocean Laboratory (Climatoc-Lab), Moncada, Valencia, Spain.
