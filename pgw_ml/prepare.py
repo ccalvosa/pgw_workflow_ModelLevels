@@ -5,7 +5,9 @@ Preparation of the deltas of ONE CMIP6 model on the HARMONIE/IFS grid.
      the native GCM grid).
   2. Fills NaNs (below the GCM orography or empty upper levels) with
      constant vertical extrapolation from the nearest valid level.
-  3. Interpolates bilinearly to the target grid points.
+  3. Interpolates bilinearly to the target grid points, with the grid of
+     each variable (some models store 3D and 2D variables on staggered
+     grids, e.g., ACCESS-ESM1-5).
   4. Rotates ua/va to the grid basis if the GRIB winds are grid-relative.
   5. Writes <out_path> (dims: month, plev, point).
 """
@@ -68,7 +70,7 @@ def prepare_model(gi, path_deltas, out_path, margin=3.0, log=print, tag=""):
     rotate = gi["gridType"] == "rotated_ll" and gi["uv_relative_to_grid"] == 1
     pre = f"  [{tag}] " if tag else "  "
 
-    regrid = None
+    regrids = {}          # one interpolator per GCM grid (variables can be staggered)
     data_vars = {}
     plev = None
     mid_day = None
@@ -84,9 +86,12 @@ def prepare_model(gi, path_deltas, out_path, margin=3.0, log=print, tag=""):
                 raise ValueError(f"{var}: 12 months expected, found {da.sizes['time']}")
             if mid_day is None:
                 mid_day = ds["time"].dt.day.values
-            if regrid is None:
-                regrid = GCMToPoints(ds["lat"].values, ds["lon"].values, lat, lon,
-                                     margin=margin)
+            glat, glon = ds["lat"].values, ds["lon"].values
+            key = (glat.size, glon.size, round(float(glat[0]), 6), round(float(glat[-1]), 6),
+                   round(float(glon[0]), 6), round(float(glon[-1]), 6))
+            if key not in regrids:
+                regrids[key] = GCMToPoints(glat, glon, lat, lon, margin=margin)
+            regrid = regrids[key]
             arr = da.values.astype(float)
             units = da.attrs.get("units", "")
             if var in VARS_3D:
