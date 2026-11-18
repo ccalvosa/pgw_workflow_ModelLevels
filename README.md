@@ -14,6 +14,8 @@ The methodology follows PGW4ERA5 ([Brogli et al., 2023](https://doi.org/10.5194/
 [code](https://github.com/Potopoles/PGW4ERA5)), adapted to IFS GRIB files on a
 rotated grid with mixed GRIB1/GRIB2 encoding.
 
+🌐 **Project website:** <https://ccalvosa.github.io/pgw_workflow_ModelLevels/>
+
 📄 **Technical note (PDF):** [`docs/latex/pgw_modellevels_technical_note.pdf`](docs/latex/pgw_modellevels_technical_note.pdf)
 
 ---
@@ -479,6 +481,7 @@ delta files.
 │   └── verify.py               #   verification metrics for one file
 ├── tests/test_zero_deltas.py   # Round-trip test with zero deltas
 ├── docs/
+│   ├── index.html              # Project website (GitHub Pages)
 │   ├── latex/                  # Technical note (LaTeX source + PDF)
 │   └── figures/                # Example figures
 └── logs/
